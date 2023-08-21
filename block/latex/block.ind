@@ -1,0 +1,44 @@
+\begin{sphinxtheindex}
+\let\bigletter\sphinxstyleindexlettergroup
+\let\spxpagem \sphinxstyleindexpagemain
+\let\spxentry \sphinxstyleindexentry
+\let\spxextra \sphinxstyleindexextra
+
+  \bigletter B
+  \item \spxentry{blk\_eh\_timer\_return}\spxextra{C type}, \hyperpage{17}
+  \item \spxentry{blk\_execute\_rq}\spxextra{C function}, \hyperpage{25}
+  \item \spxentry{blk\_execute\_rq\_nowait}\spxextra{C function}, \hyperpage{25}
+  \item \spxentry{blk\_insert\_cloned\_request}\spxextra{C function}, \hyperpage{27}
+  \item \spxentry{blk\_mq\_complete\_request}\spxextra{C function}, \hyperpage{24}
+  \item \spxentry{blk\_mq\_delay\_run\_hw\_queue}\spxextra{C function}, \hyperpage{25}
+  \item \spxentry{blk\_mq\_delay\_run\_hw\_queues}\spxextra{C function}, \hyperpage{26}
+  \item \spxentry{blk\_mq\_destroy\_queue}\spxextra{C function}, \hyperpage{27}
+  \item \spxentry{blk\_mq\_hw\_ctx}\spxextra{C type}, \hyperpage{18}
+  \item \spxentry{blk\_mq\_ops}\spxextra{C type}, \hyperpage{21}
+  \item \spxentry{blk\_mq\_queue\_data}\spxextra{C type}, \hyperpage{21}
+  \item \spxentry{blk\_mq\_queue\_map}\spxextra{C type}, \hyperpage{20}
+  \item \spxentry{blk\_mq\_quiesce\_queue}\spxextra{C function}, \hyperpage{24}
+  \item \spxentry{blk\_mq\_request\_bypass\_insert}\spxextra{C function}, \hyperpage{26}
+  \item \spxentry{blk\_mq\_rq\_from\_pdu}\spxextra{C function}, \hyperpage{23}
+  \item \spxentry{blk\_mq\_rq\_state}\spxextra{C function}, \hyperpage{23}
+  \item \spxentry{blk\_mq\_rq\_to\_pdu}\spxextra{C function}, \hyperpage{23}
+  \item \spxentry{blk\_mq\_run\_hw\_queue}\spxextra{C function}, \hyperpage{25}
+  \item \spxentry{blk\_mq\_run\_hw\_queues}\spxextra{C function}, \hyperpage{26}
+  \item \spxentry{blk\_mq\_start\_request}\spxextra{C function}, \hyperpage{24}
+  \item \spxentry{blk\_mq\_submit\_bio}\spxextra{C function}, \hyperpage{26}
+  \item \spxentry{blk\_mq\_tag\_set}\spxextra{C type}, \hyperpage{20}
+  \item \spxentry{blk\_mq\_try\_issue\_directly}\spxextra{C function}, \hyperpage{26}
+  \item \spxentry{blk\_mq\_wait\_quiesce\_done}\spxextra{C function}, \hyperpage{23}
+  \item \spxentry{blk\_rq\_prep\_clone}\spxextra{C function}, \hyperpage{27}
+  \item \spxentry{blk\_rq\_unprep\_clone}\spxextra{C function}, \hyperpage{27}
+  \item \spxentry{blk\_update\_request}\spxextra{C function}, \hyperpage{24}
+
+  \indexspace
+  \bigletter H
+  \item \spxentry{hctx\_type}\spxextra{C type}, \hyperpage{20}
+
+  \indexspace
+  \bigletter R
+  \item \spxentry{rq\_list\_move}\spxextra{C function}, \hyperpage{17}
+
+\end{sphinxtheindex}
