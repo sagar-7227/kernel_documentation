@@ -1,0 +1,183 @@
+--- dc.h.orig	2023-08-21 12:11:52.355711652 -0400
++++ dc.h	2023-08-21 12:05:31.760151581 -0400
+@@ -1,5 +1,5 @@
+ /*
+- * Copyright 2012-2023 Advanced Micro Devices, Inc.
++ * Copyright 2012-14 Advanced Micro Devices, Inc.
+  *
+  * Permission is hereby granted, free of charge, to any person obtaining a
+  * copy of this software and associated documentation files (the "Software"),
+@@ -45,7 +45,7 @@
+ struct set_config_cmd_payload;
+ struct dmub_notification;
+ 
+-#define DC_VER "3.2.241"
++#define DC_VER "3.2.230"
+ 
+ #define MAX_SURFACES 3
+ #define MAX_PLANES 6
+@@ -60,9 +60,7 @@
+ };
+ 
+ enum dp_protocol_version {
+-	DP_VERSION_1_4 = 0,
+-	DP_VERSION_2_1,
+-	DP_VERSION_UNKNOWN,
++	DP_VERSION_1_4,
+ };
+ 
+ enum dc_plane_type {
+@@ -211,8 +209,6 @@
+ struct dc_dmub_caps {
+ 	bool psr;
+ 	bool mclk_sw;
+-	bool subvp_psr;
+-	bool gecc_enable;
+ };
+ 
+ struct dc_caps {
+@@ -266,7 +262,6 @@
+ 	uint16_t subvp_pstate_allow_width_us;
+ 	uint16_t subvp_vertical_int_margin_us;
+ 	bool seamless_odm;
+-	uint32_t max_v_total;
+ 	uint8_t subvp_drr_vblank_start_margin_us;
+ };
+ 
+@@ -275,13 +270,8 @@
+ 	bool dedcn20_305_wa;
+ 	bool skip_clock_update;
+ 	bool lt_early_cr_pattern;
+-	struct {
+-		uint8_t uclk : 1;
+-		uint8_t fclk : 1;
+-		uint8_t dcfclk : 1;
+-		uint8_t dcfclk_ds: 1;
+-	} clock_update_disable_mask;
+ };
++
+ struct dc_dcc_surface_param {
+ 	struct dc_size surface_size;
+ 	enum surface_pixel_format format;
+@@ -416,7 +406,7 @@
+ 	uint8_t force_bios_fixed_vs;
+ 	int sdpif_request_limit_words_per_umc;
+ 	bool use_old_fixed_vs_sequence;
+-	bool dc_mode_clk_limit_support;
++	bool disable_subvp_drr;
+ };
+ 
+ enum visual_confirm {
+@@ -429,7 +419,6 @@
+ 	VISUAL_CONFIRM_FAMS = 7,
+ 	VISUAL_CONFIRM_SWIZZLE = 9,
+ 	VISUAL_CONFIRM_SUBVP = 14,
+-	VISUAL_CONFIRM_MCLK_SWITCH = 16,
+ };
+ 
+ enum dc_psr_power_opts {
+@@ -511,6 +500,28 @@
+  *
+  * For any clocks that may differ per pipe only the max is stored in this
+  * structure
++ *
++ * @dispclk_khz:                        display clock frequency in kilohertz.
++ * @actual_dispclk_khz:                 actual display clock frequency in kilohertz.
++ * @dppclk_khz:                         data processing pipeline clock frequency in kilohertz.
++ * @actual_dppclk_khz:                  actual data processing pipeline clock
++ *                                      frequency in kilohertz.
++ * @disp_dpp_voltage_level_khz:         voltage level for the display data processing
++ *                                      pipeline clock in kilohertz.
++ * @dcfclk_khz:                         display clock frequency for the display clock controller in kilohertz.
++ * @socclk_khz:                         system-on-chip clock frequency in kilohertz.
++ * @dcfclk_deep_sleep_khz:              display clock frequency for deep sleep mode in kilohertz.
++ * @fclk_khz: clock                     frequency of GPU core in kilohertz.
++ * @phyclk_khz:                         clock frequency of PHY in kilohertz.
++ * @dramclk_khz:                        DRAM memory clock frequency in kilohertz.
++ * @p_state_change_support:             support for changing power states.
++ * @dtbclk_en:                          whether DTB (Display Timing Controller Block) clock is enabled.
++ * @ref_dtbclk_khz:                     reference DTB clock frequency in kilohertz.
++ * @fclk_p_state_change_support:        support for changing power states of the GPU core clock.
++ * @pwr_state:                          enum representing power state
++ * @prev_p_state_change_support:        previous power state change support.
++ * @fclk_prev_p_state_change_support:   previous power state change support for the GPU core clock.
++ * @num_ways:                           number of ways.
+  */
+ struct dc_clocks {
+ 	int dispclk_khz;
+@@ -709,8 +720,6 @@
+ struct dc_bounding_box_overrides {
+ 	int sr_exit_time_ns;
+ 	int sr_enter_plus_exit_time_ns;
+-	int sr_exit_z8_time_ns;
+-	int sr_enter_plus_exit_z8_time_ns;
+ 	int urgent_latency_ns;
+ 	int percent_of_ideal_drambw;
+ 	int dram_clock_change_latency_ns;
+@@ -780,8 +789,6 @@
+ 	int sr_enter_plus_exit_time_dpm0_ns;
+ 	int sr_exit_time_ns;
+ 	int sr_enter_plus_exit_time_ns;
+-	int sr_exit_z8_time_ns;
+-	int sr_enter_plus_exit_z8_time_ns;
+ 	int urgent_latency_ns;
+ 	uint32_t underflow_assert_delay_us;
+ 	int percent_of_ideal_drambw;
+@@ -850,7 +857,6 @@
+ 	/* Enable dmub aux for legacy ddc */
+ 	bool enable_dmub_aux_for_legacy_ddc;
+ 	bool disable_fams;
+-	bool disable_fams_gaming;
+ 	/* FEC/PSR1 sequence enable delay in 100us */
+ 	uint8_t fec_enable_delay_in100us;
+ 	bool enable_driver_sequence_debug;
+@@ -894,14 +900,6 @@
+ 	uint32_t fpo_vactive_margin_us;
+ 	bool disable_fpo_vactive;
+ 	bool disable_boot_optimizations;
+-	bool override_odm_optimization;
+-	bool minimize_dispclk_using_odm;
+-	bool disable_subvp_high_refresh;
+-	bool disable_dp_plus_plus_wa;
+-	uint32_t fpo_vactive_min_active_margin_us;
+-	uint32_t fpo_vactive_max_blank_us;
+-	bool enable_legacy_fast_update;
+-	bool disable_dc_mode_overwrite;
+ };
+ 
+ struct gpu_info_soc_bounding_box_v1_0;
+@@ -1265,16 +1263,6 @@
+ 	struct scaling_taps scaling_quality;
+ };
+ 
+-struct dc_fast_update {
+-	const struct dc_flip_addrs *flip_addr;
+-	const struct dc_gamma *gamma;
+-	const struct colorspace_transform *gamut_remap_matrix;
+-	const struct dc_csc_transform *input_csc_color_matrix;
+-	const struct fixed31_32 *coeff_reduction_factor;
+-	struct dc_transfer_func *out_transfer_func;
+-	struct dc_csc_transform *output_csc_transform;
+-};
+-
+ struct dc_surface_update {
+ 	struct dc_plane_state *surface;
+ 
+@@ -1535,8 +1523,6 @@
+ 		/* Forced DPIA into TBT3 compatibility mode. */
+ 		bool dpia_forced_tbt3_mode;
+ 		bool dongle_mode_timing_override;
+-		bool blank_stream_on_ocs_change;
+-		bool read_dpcd204h_on_irq_hpd;
+ 	} wa_flags;
+ 	struct link_mst_stream_allocation_table mst_stream_alloc_table;
+ 
+@@ -2253,8 +2239,6 @@
+ void dc_process_dmub_dpia_hpd_int_enable(const struct dc *dc,
+ 				uint32_t hpd_int_enable);
+ 
+-void dc_print_dmub_diagnostic_data(const struct dc *dc);
+-
+ /* DSC Interfaces */
+ #include "dc_dsc.h"
+ 
